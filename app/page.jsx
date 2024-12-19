@@ -1,35 +1,61 @@
-import React from "react";
-import TicketCard from "./(components)/TicketCard";
+"use client"
+import { useState, useEffect } from "react";
+import TicketCard from "./(components)/TicketCard"; // Adjust the import according to your file structure
 
-const getTickets = async () => {
-  try {
-    const res = await fetch("http://localhost:3000/api/Tickets", {
-      cache: "no-store",
-    });
+const Dashboard = () => {
+  const [loading, setLoading] = useState(true);
+  const [tickets, setTickets] = useState([]);
 
-    if (!res.ok) {
-      throw new Error("Failed to fetch topics");
-    }
+  useEffect(() => {
+    // Fetch tickets from MongoDB
+    const getTickets = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/api/Tickets", {
+          cache: "no-store",
+        });
+    
+        if (!res.ok) {
+          throw new Error("Failed to fetch topics");
+        }
+    
+        return res.json();
+      } catch (error) {
+        console.log("Error loading topics: ", error);
+      }
+      try{
+        const data = await res.json();
+        setTickets(data.tickets);
 
-    return res.json();
-  } catch (error) {
-    console.log("Error loading topics: ", error);
-  }
-};
+      }
+      catch(err){
+        console.log(err);
+        return [];
+      }
+      finally{
+        setLoading(false);
+      }
+    };
+    
 
-const Dashboard = async () => {
-  const data = await getTickets();
+    getTickets();
+  }, []);
 
-  
-
-  const tickets = data.tickets;
-
-  const uniqueCategories = [
+const uniqueCategories = [
     ...new Set(tickets?.map(({ category }) => category)),
   ];
 
   return (
-    <div className="p-5">
+    <div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : tickets.length === 0 ? (
+        <div>
+          <h1>No Tickets Found</h1>
+          <p>It seems there are no tickets available at the moment. Please try again later or reload the page.</p>
+  
+        </div>
+      ) : (
+        <div className="p-5">
       <div>
         {tickets &&
           uniqueCategories?.map((uniqueCategory, categoryIndex) => (
@@ -49,6 +75,8 @@ const Dashboard = async () => {
             </div>
           ))}
       </div>
+    </div>
+      )}
     </div>
   );
 };

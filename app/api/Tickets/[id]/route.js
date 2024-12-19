@@ -4,8 +4,16 @@ import { NextResponse } from "next/server";
 export async function GET(request, { params }) {
   const { id } = params;
 
+  try{
+      if(Ticket === null) {return NextResponse.json({ message: "Ticket not found" }, { status: 404 });
+  }
   const foundTicket = await Ticket.findOne({ _id: id });
   return NextResponse.json({ foundTicket }, { status: 200 });
+  }
+  catch (err) {
+    console.error("Error fetching tickets:", err.message);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 }
 
 export async function PUT(req, { params }) {
