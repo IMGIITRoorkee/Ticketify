@@ -34,9 +34,27 @@ const EditTicketForm = ({ ticket }) => {
       [name]: value,
     }));
   };
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    setFormData((prevState) => ({
+      ...prevState,
+      files: files,
+    }));
+  };
+    
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formDataToSend = new FormData();
+    Object.keys(formData).forEach((key) => {
+      if (key === "files") {
+        formData.files.forEach((file) => {
+          formDataToSend.append("files", file);
+        });
+      } else {
+        formDataToSend.append(key, formData[key]);
+      }
+    });
 
     if (EDITMODE) {
       const res = await fetch(`/api/Tickets/${ticket._id}`, {
@@ -169,6 +187,14 @@ const EditTicketForm = ({ ticket }) => {
           max="100"
           onChange={handleChange}
         />
+        <label>Attach Files</label>
+        <input
+          type="file"
+          name="files"
+          onChange={handleFileChange}
+          multiple
+        />
+        
         <label>Status</label>
         <select name="status" value={formData.status} onChange={handleChange}>
           <option value="not started">Not Started</option>
