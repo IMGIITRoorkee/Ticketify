@@ -1,4 +1,3 @@
-// Add the "use client" directive at the top
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -23,25 +22,23 @@ const getTickets = async () => {
 const Dashboard = () => {
   const [tickets, setTickets] = useState([]);
   const [filteredTickets, setFilteredTickets] = useState([]);
-  const [statusFilter, setStatusFilter] = useState("all"); // Default filter for all statuses
-
-  // Fetch tickets when component mounts
+  const [statusFilter, setStatusFilter] = useState("all"); 
+  
   useEffect(() => {
     const fetchTickets = async () => {
       const data = await getTickets();
       if (data?.tickets) {
         setTickets(data.tickets);
-        setFilteredTickets(data.tickets); // Initially show all tickets
+        setFilteredTickets(data.tickets); 
       }
     };
 
     fetchTickets();
   }, []);
 
-  // Filter tickets based on selected status
   useEffect(() => {
     if (statusFilter === "all") {
-      setFilteredTickets(tickets); // Show all tickets if 'all' is selected
+      setFilteredTickets(tickets); 
     } else {
       setFilteredTickets(tickets.filter((ticket) => ticket.status === statusFilter));
     }
@@ -66,10 +63,10 @@ const Dashboard = () => {
           onChange={handleStatusChange}
           className="p-2 border rounded"
         >
-          <option value="all">All</option>
-          <option value="open">Open</option>
-          <option value="in-progress">In Progress</option>
-          <option value="closed">Closed</option>
+          <option value="All">All</option>
+          <option value="Started">Started</option>
+          <option value="Not Started">Not Started</option>
+          <option value="Done">Done</option>
         </select>
       </div>
 
