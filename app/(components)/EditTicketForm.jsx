@@ -5,6 +5,7 @@ import React, { useState } from "react";
 const EditTicketForm = ({ ticket }) => {
   const EDITMODE = ticket._id === "new" ? false : true;
   const router = useRouter();
+  
   const startingTicketData = {
     title: "",
     description: "",
@@ -25,12 +26,11 @@ const EditTicketForm = ({ ticket }) => {
 
   const [formData, setFormData] = useState(startingTicketData);
 
-  const handleChange = (e) => {
-    const value = e.target.value;
-    const name = e.target.name;
+  const isEditable = formData.status === "not started";  // Only allow editing if the status is "not started"
 
-    setFormData((preState) => ({
-      ...preState,
+  const handleChange = (name, value) => {
+    setFormData((prevState) => ({
+      ...prevState,
       [name]: value,
     }));
   };
@@ -68,41 +68,62 @@ const EditTicketForm = ({ ticket }) => {
   const categories = [
     "Hardware Problem",
     "Software Problem",
-    "Application Deveopment",
+    "Application Development",
     "Project",
   ];
 
   return (
-    <div className=" flex justify-center">
+    <div className="flex justify-center">
       <form
         onSubmit={handleSubmit}
         method="post"
         className="flex flex-col gap-3 w-1/2"
       >
         <h3>{EDITMODE ? "Update Your Ticket" : "Create New Ticket"}</h3>
-        <label>Title</label>
-        <input
-          id="title"
-          name="title"
-          type="text"
-          onChange={handleChange}
-          required={true}
-          value={formData.title}
-        />
+
+        <label>
+          Title
+          <input
+            type="text"
+            value={formData.title}
+            onChange={(e) => handleChange("title", e.target.value)}
+            disabled={!isEditable}
+            className="form-input"
+            title={
+              !isEditable
+                ? "Editing is disabled because the status is 'started' or 'done'."
+                : ""
+            }
+          />
+        </label>
+
         <label>Description</label>
         <textarea
           id="description"
           name="description"
-          
           required={true}
-          
           rows="5"
+          value={formData.description}
+          onChange={(e) => handleChange("description", e.target.value)}
+          disabled={!isEditable}
+          title={
+            !isEditable
+              ? "Editing is disabled because the status is 'started' or 'done'."
+              : ""
+          }
         />
+
         <label>Category</label>
         <select
           name="category"
           value={formData.category}
-          onChange={handleChange}
+          onChange={(e) => handleChange("category", e.target.value)}
+          disabled={!isEditable}
+          title={
+            !isEditable
+              ? "Editing is disabled because the status is 'started' or 'done'."
+              : ""
+          }
         >
           {categories?.map((category, _index) => (
             <option key={_index} value={category}>
@@ -112,53 +133,99 @@ const EditTicketForm = ({ ticket }) => {
         </select>
 
         <label>Priority</label>
-        <div>
-          <input
-            id="priority-1"
-            name="priority"
-            type="radio"
-            onChange={handleChange}
-            value={1}
-            checked={formData.priority == 1}
-          />
-          <label>1</label>
-          <input
-            id="priority-2"
-            name="priority"
-            type="radio"
-            onChange={handleChange}
-            value={2}
-            checked={formData.priority == 2}
-          />
-          <label>2</label>
-          <input
-            id="priority-3"
-            name="priority"
-            type="radio"
-            onChange={handleChange}
-            value={3}
-            checked={formData.priority == 3}
-          />
-          <label>3</label>
-          <input
-            id="priority-4"
-            name="priority"
-            type="radio"
-            onChange={handleChange}
-            value={4}
-            checked={formData.priority == 4}
-          />
-          <label>4</label>
-          <input
-            id="priority-5"
-            name="priority"
-            type="radio"
-            onChange={handleChange}
-            value={5}
-            checked={formData.priority == 5}
-          />
-          <label>5</label>
+        <div className="flex flex-col">
+          <div className="mb-2">
+            <input
+              id="priority-1"
+              name="priority"
+              type="radio"
+              onChange={handleChange}
+              value={1}
+              checked={formData.priority == 1}
+              disabled={!isEditable}
+              title={
+                !isEditable
+                  ? "Editing is disabled because the status is 'started' or 'done'."
+                  : ""
+              }
+            />
+            <label>1</label>
+          </div>
+          
+          <div className="mb-2">
+            <input
+              id="priority-2"
+              name="priority"
+              type="radio"
+              onChange={handleChange}
+              value={2}
+              checked={formData.priority == 2}
+              disabled={!isEditable}
+              title={
+                !isEditable
+                  ? "Editing is disabled because the status is 'started' or 'done'."
+                  : ""
+              }
+            />
+            <label>2</label>
+          </div>
+          
+          <div className="mb-2">
+            <input
+              id="priority-3"
+              name="priority"
+              type="radio"
+              onChange={handleChange}
+              value={3}
+              checked={formData.priority == 3}
+              disabled={!isEditable}
+              title={
+                !isEditable
+                  ? "Editing is disabled because the status is 'started' or 'done'."
+                  : ""
+              }
+            />
+            <label>3</label>
+          </div>
+          
+          <div className="mb-2">
+            <input
+              id="priority-4"
+              name="priority"
+              type="radio"
+              onChange={handleChange}
+              value={4}
+              checked={formData.priority == 4}
+              disabled={!isEditable}
+              title={
+                !isEditable
+                  ? "Editing is disabled because the status is 'started' or 'done'."
+                  : ""
+              }
+            />
+            <label>4</label>
+          </div>
+          
+          <div className="mb-2">
+            <input
+              id="priority-5"
+              name="priority"
+              type="radio"
+              onChange={handleChange}
+              value={5}
+              checked={formData.priority == 5}
+              disabled={!isEditable}
+              title={
+                !isEditable
+                  ? "Editing is disabled because the status is 'started' or 'done'."
+                  : ""
+              }
+            />
+            <label>5</label>
+          </div>
         </div>
+
+
         <label>Progress</label>
         <input
           type="range"
@@ -167,14 +234,26 @@ const EditTicketForm = ({ ticket }) => {
           value={formData.progress}
           min="0"
           max="100"
-          onChange={handleChange}
+          onChange={(e) => handleChange("progress", e.target.value)}
+          disabled={!isEditable}
+          title={
+            !isEditable
+              ? "Editing is disabled because the status is 'started' or 'done'."
+              : ""
+          }
         />
+
         <label>Status</label>
-        <select name="status" value={formData.status} onChange={handleChange}>
+        <select
+          name="status"
+          value={formData.status}
+          onChange={(e) => handleChange("status", e.target.value)}
+        >
           <option value="not started">Not Started</option>
           <option value="started">Started</option>
           <option value="done">Done</option>
         </select>
+
         <input
           type="submit"
           className="btn max-w-xs"
