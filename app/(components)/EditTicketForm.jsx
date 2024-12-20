@@ -70,6 +70,8 @@ const EditTicketForm = ({ ticket }) => {
     "Software Problem",
     "Application Deveopment",
     "Project",
+    "Bug Fix",
+    "MVP"
   ];
 
   return (
