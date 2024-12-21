@@ -38,6 +38,7 @@ const Dashboard = async () => {
               <div className="lg:grid grid-cols-2 xl:grid-cols-4 ">
                 {tickets
                   .filter((ticket) => ticket.category === uniqueCategory)
+                  .sort((a, b) => b.priority - a.priority)
                   .map((filteredTicket, _index) => (
                     <TicketCard
                       id={_index}
