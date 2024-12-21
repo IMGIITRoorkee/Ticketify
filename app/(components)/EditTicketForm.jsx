@@ -1,9 +1,9 @@
 "use client";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 
 const EditTicketForm = ({ ticket }) => {
-  const EDITMODE = ticket._id === "new" ? false : true;
+  
   const router = useRouter();
   const startingTicketData = {
     title: "",
@@ -13,6 +13,15 @@ const EditTicketForm = ({ ticket }) => {
     status: "not started",
     category: "Hardware Problem",
   };
+  useEffect(() => {
+    if (!ticket) {
+      router.push("/404");
+    }
+  }, [ticket, router]);
+
+  if (!ticket) {
+    return null;
+  }
 
   if (EDITMODE) {
     startingTicketData["title"] = ticket.title;

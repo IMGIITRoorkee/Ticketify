@@ -21,8 +21,14 @@ const TicketPage = async ({ params }) => {
   const EDITMODE = params.id === "new" ? false : true;
 
   if (EDITMODE) {
-    updateTicketData = await getTicketById(params.id);
-    updateTicketData = updateTicketData.foundTicket;
+    const ticketData = await getTicketById(params.id);
+
+    if (ticketData && ticketData.foundTicket) {
+      updateTicketData = ticketData.foundTicket;
+    } else {
+      console.error("Error: Ticket data not found.");
+      updateTicketData = null; 
+    }
   } else {
     updateTicketData = {
       _id: "new",
