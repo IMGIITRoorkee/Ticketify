@@ -52,9 +52,10 @@ const EditTicketForm = ({ ticket }) => {
     } else {
       const res = await fetch("/api/Tickets", {
         method: "POST",
-        body: JSON.stringify({ formData }),
-        //@ts-ignore
-        "Content-Type": "application/json",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ formData })
       });
       if (!res.ok) {
         throw new Error("Failed to create ticket");
@@ -70,6 +71,8 @@ const EditTicketForm = ({ ticket }) => {
     "Software Problem",
     "Application Deveopment",
     "Project",
+    "Bug Fix",
+    "MVP"
   ];
 
   return (
@@ -93,9 +96,9 @@ const EditTicketForm = ({ ticket }) => {
         <textarea
           id="description"
           name="description"
-          
+          onChange={handleChange}
           required={true}
-          
+          value={formData.description}
           rows="5"
         />
         <label>Category</label>
