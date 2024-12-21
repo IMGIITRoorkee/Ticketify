@@ -14,10 +14,22 @@ export async function PUT(req, { params }) {
 
     const body = await req.json();
     const ticketData = body.formData;
+    const ticketId = req.url.split("/").pop(); 
+    const existingTicket = await Ticket.findById(ticketId);
 
     const updateTicketData = await Ticket.findByIdAndUpdate(id, {
       ...ticketData,
     });
+    if (existingTicket.status !== "not started") {
+      const { title, description, category, priority } = ticketData;
+
+      if (title !== existingTicket.title || description !== existingTicket.description || category !== existingTicket.category || priority !== existingTicket.priority) {
+        return NextResponse.json(
+          { message: "Cannot edit fields once the status is not 'not started'" },
+          { status: 400 }
+        );
+      }
+    }
 
     return NextResponse.json({ message: "Ticket updated" }, { status: 200 });
   } catch (error) {
