@@ -16,18 +16,18 @@ const getTickets = async () => {
     return res.json();
   } catch (error) {
     console.log("Error loading tickets: ", error);
-    return { tickets: [] }; // Fallback to an empty array in case of an error
+    return { tickets: [] }; 
   }
 };
 
 const Dashboard = () => {
   const [tickets, setTickets] = useState([]);
-  const [viewBy, setViewBy] = useState("category"); // Track the "View By" option
+  const [viewBy, setViewBy] = useState("category"); 
 
   useEffect(() => {
     const fetchTickets = async () => {
       const data = await getTickets();
-      setTickets(data?.tickets || []); // Ensure tickets is always an array
+      setTickets(data?.tickets || []); 
     };
 
     fetchTickets();
@@ -46,7 +46,6 @@ const Dashboard = () => {
 
   return (
     <div className="p-5">
-      {/* Dropdown for "View By" */}
       <div className="mb-4">
         <label htmlFor="view-by" className="mr-2">
           View By:
@@ -62,7 +61,6 @@ const Dashboard = () => {
         </select>
       </div>
 
-      {/* Render grouped tickets */}
       <div>
         {getUniqueGroups().map((group, groupIndex) => (
           <div key={groupIndex} className="mb-4">
