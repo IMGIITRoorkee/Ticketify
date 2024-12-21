@@ -22,8 +22,8 @@ const getTickets = async () => {
 const Dashboard = () => {
   const [tickets, setTickets] = useState([]);
   const [filteredTickets, setFilteredTickets] = useState([]);
-  const [statusFilter, setStatusFilter] = useState("all"); 
-  
+  const [statusFilter, setStatusFilter] = useState("all");
+
   useEffect(() => {
     const fetchTickets = async () => {
       const data = await getTickets();
@@ -38,50 +38,54 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (statusFilter === "all") {
-      setFilteredTickets(tickets); 
+      setFilteredTickets(tickets);
     } else {
-      setFilteredTickets(tickets.filter((ticket) => ticket.status === statusFilter));
+      setFilteredTickets(
+        tickets.filter((ticket) =>
+          ticket.status.toLowerCase() === statusFilter.toLowerCase()
+        )
+      );
     }
   }, [statusFilter, tickets]);
 
-  // Handle status filter change
   const handleStatusChange = (event) => {
-    setStatusFilter(event.target.value);
+    setStatusFilter(event.target.value.toLowerCase());
   };
 
-  // Unique categories for grouping tickets
-  const uniqueCategories = [...new Set(tickets?.map(({ category }) => category))];
+  const uniqueCategories = [
+    ...new Set(filteredTickets?.map(({ category }) => category)),
+  ];
 
   return (
     <div className="p-5">
-      {/* Status filter UI */}
       <div className="mb-4">
-        <label htmlFor="status-filter" className="mr-2">Filter by Status:</label>
+        <label htmlFor="status-filter" className="mr-2">
+          Filter by Status:
+        </label>
         <select
           id="status-filter"
           value={statusFilter}
           onChange={handleStatusChange}
           className="p-2 border rounded"
         >
-          <option value="All">All</option>
-          <option value="Started">Started</option>
-          <option value="Not Started">Not Started</option>
-          <option value="Done">Done</option>
+          <option value="all">All</option>
+          <option value="started">Started</option>
+          <option value="not started">Not Started</option>
+          <option value="done">Done</option>
         </select>
       </div>
 
-      {/* Display tickets grouped by categories */}
       <div>
-        {filteredTickets && uniqueCategories?.map((uniqueCategory, categoryIndex) => (
+        {uniqueCategories.map((uniqueCategory, categoryIndex) => (
           <div key={categoryIndex} className="mb-4">
             <h2>{uniqueCategory}</h2>
-            <div className="lg:grid grid-cols-2 xl:grid-cols-4">
+            <div className="lg:grid grid-cols-2 xl:grid-cols-4 gap-4">
               {filteredTickets
                 .filter((ticket) => ticket.category === uniqueCategory)
-                .map((filteredTicket, _index) => (
+                .map((filteredTicket, index) => (
                   <TicketCard
-                    id={_index}
-                    key={_index}
+                    id={filteredTicket._id || index}
+                    key={filteredTicket._id || index}
                     ticket={filteredTicket}
                   />
                 ))}
@@ -94,5 +98,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-
