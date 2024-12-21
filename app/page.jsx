@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import TicketCard from "./(components)/TicketCard";
 
 const getTickets = async () => {
@@ -17,37 +19,79 @@ const getTickets = async () => {
   }
 };
 
-const Dashboard = async () => {
-  const data = await getTickets();
+const Dashboard = () => {
+  const [tickets, setTickets] = useState([]);
+  const [filteredTickets, setFilteredTickets] = useState([]);
+  const [statusFilter, setStatusFilter] = useState("all");
 
-  
+  useEffect(() => {
+    const fetchTickets = async () => {
+      const data = await getTickets();
+      if (data?.tickets) {
+        setTickets(data.tickets);
+        setFilteredTickets(data.tickets); 
+      }
+    };
 
-  const tickets = data.tickets;
+    fetchTickets();
+  }, []);
+
+  useEffect(() => {
+    if (statusFilter === "all") {
+      setFilteredTickets(tickets);
+    } else {
+      setFilteredTickets(
+        tickets.filter((ticket) =>
+          ticket.status.toLowerCase() === statusFilter.toLowerCase()
+        )
+      );
+    }
+  }, [statusFilter, tickets]);
+
+  const handleStatusChange = (event) => {
+    setStatusFilter(event.target.value.toLowerCase());
+  };
 
   const uniqueCategories = [
-    ...new Set(tickets?.map(({ category }) => category)),
+    ...new Set(filteredTickets?.map(({ category }) => category)),
   ];
 
   return (
     <div className="p-5">
+      <div className="mb-4">
+        <label htmlFor="status-filter" className="mr-2">
+          Filter by Status:
+        </label>
+        <select
+          id="status-filter"
+          value={statusFilter}
+          onChange={handleStatusChange}
+          className="p-2 border rounded"
+        >
+          <option value="all">All</option>
+          <option value="started">Started</option>
+          <option value="not started">Not Started</option>
+          <option value="done">Done</option>
+        </select>
+      </div>
+
       <div>
-        {tickets &&
-          uniqueCategories?.map((uniqueCategory, categoryIndex) => (
-            <div key={categoryIndex} className="mb-4">
-              <h2>{uniqueCategory}</h2>
-              <div className="lg:grid grid-cols-2 xl:grid-cols-4 ">
-                {tickets
-                  .filter((ticket) => ticket.category === uniqueCategory)
-                  .map((filteredTicket, _index) => (
-                    <TicketCard
-                      id={_index}
-                      key={_index}
-                      ticket={filteredTicket}
-                    />
-                  ))}
-              </div>
+        {uniqueCategories.map((uniqueCategory, categoryIndex) => (
+          <div key={categoryIndex} className="mb-4">
+            <h2>{uniqueCategory}</h2>
+            <div className="lg:grid grid-cols-2 xl:grid-cols-4 gap-4">
+              {filteredTickets
+                .filter((ticket) => ticket.category === uniqueCategory)
+                .map((filteredTicket, index) => (
+                  <TicketCard
+                    id={filteredTicket._id || index}
+                    key={filteredTicket._id || index}
+                    ticket={filteredTicket}
+                  />
+                ))}
             </div>
-          ))}
+          </div>
+        ))}
       </div>
     </div>
   );
