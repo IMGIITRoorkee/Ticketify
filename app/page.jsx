@@ -72,6 +72,7 @@ const Dashboard = () => {
                     ? ticket.category === group
                     : ticket.status === group
                 )
+                .sort((a, b) => b.priority - a.priority)
                 .map((filteredTicket, ticketIndex) => (
                   <TicketCard
                     id={ticketIndex}
