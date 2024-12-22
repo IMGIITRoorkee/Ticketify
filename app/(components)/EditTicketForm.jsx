@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import React, { useState,useEffect } from "react";
 
 const EditTicketForm = ({ ticket }) => {
-  
+  const EDITMODE = ticket !== undefined;
   const router = useRouter();
   const startingTicketData = {
     title: "",
