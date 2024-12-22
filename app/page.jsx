@@ -8,12 +8,12 @@ const getTickets = async () => {
     });
 
     if (!res.ok) {
-      throw new Error("Failed to fetch topics");
+      throw new Error("Failed to fetch tickets");
     }
 
     return res.json();
   } catch (error) {
-    console.log("Error loading topics: ", error);
+    console.log("Error loading tickets: ", error);
   }
 };
 
@@ -38,6 +38,7 @@ const Dashboard = async () => {
               <div className="lg:grid grid-cols-2 xl:grid-cols-4 ">
                 {tickets
                   .filter((ticket) => ticket.category === uniqueCategory)
+                  .sort((a, b) => b.priority - a.priority)
                   .map((filteredTicket, _index) => (
                     <TicketCard
                       id={_index}
