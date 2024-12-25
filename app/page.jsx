@@ -16,18 +16,18 @@ const getTickets = async () => {
     return res.json();
   } catch (error) {
     console.log("Error loading tickets: ", error);
-    return { tickets: [] }; 
+    return { tickets: [] };
   }
 };
 
 const Dashboard = () => {
   const [tickets, setTickets] = useState([]);
-  const [viewBy, setViewBy] = useState("category"); 
+  const [viewBy, setViewBy] = useState("category");
 
   useEffect(() => {
     const fetchTickets = async () => {
       const data = await getTickets();
-      setTickets(data?.tickets || []); 
+      setTickets(data?.tickets || []);
     };
 
     fetchTickets();
