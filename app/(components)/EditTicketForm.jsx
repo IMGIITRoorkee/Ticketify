@@ -222,14 +222,11 @@ const EditTicketForm = ({ ticket }) => {
           <option value="done">Done</option>
         </select>
         <div className="flex flex-row flex-wrap justify-between gap-2">
-          {/* <input
+          <input
             type="submit"
             className="btn max-w-xs"
             value={EDITMODE ? "Update Ticket" : "Create Ticket"}
-          /> */}
-          <button type="submit" className="btn max-w-xs">
-            {EDITMODE ? "Update Ticket" : "Create Ticket"}
-          </button>
+          />
 
           {EDITMODE ? <button className="btn max-w-xs bg-red-600 text-slate-50 hover:bg-red-700 hover:text-slate-100" onClick={deleteTicket}>Delete</button> : ""}
         </div>
