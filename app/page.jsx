@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import TicketCard from "./(components)/TicketCard";
+import NoTicketExists from "./(components)/NoTicketExists";
 
 const getTickets = async () => {
   try {
@@ -16,22 +17,23 @@ const getTickets = async () => {
     return res.json();
   } catch (error) {
     console.log("Error loading tickets: ", error);
-    return { tickets: [] }; 
+    return { tickets: [] };
   }
 };
 
 const Dashboard = () => {
   const [tickets, setTickets] = useState([]);
-  const [viewBy, setViewBy] = useState("category"); 
+  const [viewBy, setViewBy] = useState("category");
 
   useEffect(() => {
     const fetchTickets = async () => {
       const data = await getTickets();
-      setTickets(data?.tickets || []); 
+      setTickets(data?.tickets || []);
     };
 
     fetchTickets();
   }, []);
+  console.log(tickets.length);
 
   const uniqueCategories = [...new Set(tickets?.map(({ category }) => category))];
   const uniqueStatuses = [...new Set(tickets?.map(({ status }) => status))];
@@ -62,6 +64,7 @@ const Dashboard = () => {
       </div>
 
       <div>
+        {tickets.length === 0 ? <NoTicketExists /> : ""}
         {getUniqueGroups().map((group, groupIndex) => (
           <div key={groupIndex} className="mb-4">
             <h2>{group}</h2>
