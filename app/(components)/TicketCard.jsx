@@ -3,8 +3,6 @@ import ProgressDisplay from "./ProgressDisplay";
 import Link from "next/link";
 
 const TicketCard = ({ ticket }) => {
-  console.log(Intl.DateTimeFormat().resolvedOptions());
-
   function formatTimestamp(timestamp) {
     const options = {
       year: "numeric",
