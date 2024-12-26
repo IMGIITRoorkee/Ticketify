@@ -3,6 +3,8 @@ import ProgressDisplay from "./ProgressDisplay";
 import Link from "next/link";
 
 const TicketCard = ({ ticket }) => {
+  console.log(Intl.DateTimeFormat().resolvedOptions());
+
   function formatTimestamp(timestamp) {
     const options = {
       year: "numeric",
@@ -11,10 +13,11 @@ const TicketCard = ({ ticket }) => {
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
     };
 
     const date = new Date(timestamp);
-    const formattedDate = date.toLocaleString("en-US", options);
+    const formattedDate = date.toLocaleString("en-IN", options);
 
     return formattedDate;
   }
