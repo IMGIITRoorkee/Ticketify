@@ -24,6 +24,7 @@ const getTickets = async () => {
 const Dashboard = () => {
   const [tickets, setTickets] = useState([]);
   const [viewBy, setViewBy] = useState("category");
+  const [groupVisibility, setGroupVisibility] = useState({}); // Tracks visibility for each group
 
   useEffect(() => {
     const fetchTickets = async () => {
@@ -39,15 +40,25 @@ const Dashboard = () => {
 
   const handleViewByChange = (event) => {
     setViewBy(event.target.value);
+    setGroupVisibility({});
   };
 
   const getUniqueGroups = () => {
     return viewBy === "category" ? uniqueCategories : uniqueStatuses;
   };
 
+  const toggleGroupVisibility = (group) => {
+    setGroupVisibility((prevState) => ({
+      ...prevState,
+      [group]: !prevState[group],
+    }));
+  };
+
   return (
     <div className="p-5">
-      {tickets.length === 0 ? <NoTicketExistsCard /> :
+      {tickets.length === 0 ? (
+        <NoTicketExistsCard />
+      ) : (
         <>
           <div className="mb-4">
             <label htmlFor="view-by" className="mr-2">
@@ -67,27 +78,38 @@ const Dashboard = () => {
           <div>
             {getUniqueGroups().map((group, groupIndex) => (
               <div key={groupIndex} className="mb-4">
-                <h2>{group}</h2>
-                <div className="lg:grid grid-cols-2 xl:grid-cols-4 gap-4">
-                  {tickets
-                    .filter((ticket) =>
-                      viewBy === "category"
-                        ? ticket.category === group
-                        : ticket.status === group
-                    )
-                    .sort((a, b) => b.priority - a.priority)
-                    .map((filteredTicket, ticketIndex) => (
-                      <TicketCard
-                        id={ticketIndex}
-                        key={ticketIndex}
-                        ticket={filteredTicket}
-                      />
-                    ))}
+                <div
+                  className="flex justify-between items-center cursor-pointer bg-black-200 p-2 rounded"
+                  onClick={() => toggleGroupVisibility(group)}
+                >
+                  <h2 className="font-bold">{group}</h2>
+                  <span>
+                    {groupVisibility[group] ? "▼" : "►"}
+                  </span>
                 </div>
+                {groupVisibility[group] && (
+                  <div className="lg:grid grid-cols-2 xl:grid-cols-4 gap-4 mt-2">
+                    {tickets
+                      .filter((ticket) =>
+                        viewBy === "category"
+                          ? ticket.category === group
+                          : ticket.status === group
+                      )
+                      .sort((a, b) => b.priority - a.priority)
+                      .map((filteredTicket, ticketIndex) => (
+                        <TicketCard
+                          id={ticketIndex}
+                          key={ticketIndex}
+                          ticket={filteredTicket}
+                        />
+                      ))}
+                  </div>
+                )}
               </div>
             ))}
           </div>
-        </>}
+        </>
+      )}
     </div>
   );
 };
