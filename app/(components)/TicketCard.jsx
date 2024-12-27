@@ -11,10 +11,13 @@ const TicketCard = ({ ticket }) => {
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
     };
 
+    const userLocale = Intl.DateTimeFormat().resolvedOptions().locale;
+
     const date = new Date(timestamp);
-    const formattedDate = date.toLocaleString("en-US", options);
+    const formattedDate = date.toLocaleString(userLocale, options);
 
     return formattedDate;
   }
