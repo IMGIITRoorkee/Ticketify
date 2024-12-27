@@ -33,7 +33,6 @@ const Dashboard = () => {
 
     fetchTickets();
   }, []);
-  console.log(tickets.length);
 
   const uniqueCategories = [...new Set(tickets?.map(({ category }) => category))];
   const uniqueStatuses = [...new Set(tickets?.map(({ status }) => status))];
