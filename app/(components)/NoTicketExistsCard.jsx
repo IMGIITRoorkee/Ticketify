@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const NoTicketExists = () => {
+const NoTicketExistsCard = () => {
     return (
         <div className="lg:grid grid-cols-2 xl:grid-cols-4 gap-4">
             <div
@@ -17,4 +17,4 @@ const NoTicketExists = () => {
     );
 }
 
-export default NoTicketExists
+export default NoTicketExistsCard

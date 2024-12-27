@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import TicketCard from "./(components)/TicketCard";
-import NoTicketExists from "./(components)/NoTicketExists";
+import NoTicketExistsCard from "./(components)/NoTicketExistsCard";
 
 const getTickets = async () => {
   try {
@@ -47,7 +47,7 @@ const Dashboard = () => {
 
   return (
     <div className="p-5">
-      {tickets.length === 0 ? <NoTicketExists /> :
+      {tickets.length === 0 ? <NoTicketExistsCard /> :
         <>
           <div className="mb-4">
             <label htmlFor="view-by" className="mr-2">
