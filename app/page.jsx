@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import TicketCard from "./(components)/TicketCard";
+import NoTicketExistsCard from "./(components)/NoTicketExistsCard";
 
 const getTickets = async () => {
   try {
@@ -46,44 +47,47 @@ const Dashboard = () => {
 
   return (
     <div className="p-5">
-      <div className="mb-4">
-        <label htmlFor="view-by" className="mr-2">
-          View By:
-        </label>
-        <select
-          id="view-by"
-          value={viewBy}
-          onChange={handleViewByChange}
-          className="p-2 border rounded"
-        >
-          <option value="category">Category</option>
-          <option value="status">Status</option>
-        </select>
-      </div>
-
-      <div>
-        {getUniqueGroups().map((group, groupIndex) => (
-          <div key={groupIndex} className="mb-4">
-            <h2>{group}</h2>
-            <div className="lg:grid grid-cols-2 xl:grid-cols-4 gap-4">
-              {tickets
-                .filter((ticket) =>
-                  viewBy === "category"
-                    ? ticket.category === group
-                    : ticket.status === group
-                )
-                .sort((a, b) => b.priority - a.priority)
-                .map((filteredTicket, ticketIndex) => (
-                  <TicketCard
-                    id={ticketIndex}
-                    key={ticketIndex}
-                    ticket={filteredTicket}
-                  />
-                ))}
-            </div>
+      {tickets.length === 0 ? <NoTicketExistsCard /> :
+        <>
+          <div className="mb-4">
+            <label htmlFor="view-by" className="mr-2">
+              View By:
+            </label>
+            <select
+              id="view-by"
+              value={viewBy}
+              onChange={handleViewByChange}
+              className="p-2 border rounded"
+            >
+              <option value="category">Category</option>
+              <option value="status">Status</option>
+            </select>
           </div>
-        ))}
-      </div>
+
+          <div>
+            {getUniqueGroups().map((group, groupIndex) => (
+              <div key={groupIndex} className="mb-4">
+                <h2>{group}</h2>
+                <div className="lg:grid grid-cols-2 xl:grid-cols-4 gap-4">
+                  {tickets
+                    .filter((ticket) =>
+                      viewBy === "category"
+                        ? ticket.category === group
+                        : ticket.status === group
+                    )
+                    .sort((a, b) => b.priority - a.priority)
+                    .map((filteredTicket, ticketIndex) => (
+                      <TicketCard
+                        id={ticketIndex}
+                        key={ticketIndex}
+                        ticket={filteredTicket}
+                      />
+                    ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </>}
     </div>
   );
 };
