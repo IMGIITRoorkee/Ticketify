@@ -24,7 +24,7 @@ const getTickets = async () => {
 const Dashboard = () => {
   const [tickets, setTickets] = useState([]);
   const [viewBy, setViewBy] = useState("category");
-  const [groupVisibility, setGroupVisibility] = useState({}); // Tracks visibility for each group
+  const [groupVisibility, setGroupVisibility] = useState({});
 
   useEffect(() => {
     const fetchTickets = async () => {
@@ -56,9 +56,7 @@ const Dashboard = () => {
 
   return (
     <div className="p-5">
-      {tickets.length === 0 ? (
-        <NoTicketExistsCard />
-      ) : (
+      {tickets.length === 0 ? <NoTicketExistsCard /> :
         <>
           <div className="mb-4">
             <label htmlFor="view-by" className="mr-2">
@@ -108,8 +106,7 @@ const Dashboard = () => {
               </div>
             ))}
           </div>
-        </>
-      )}
+        </>}
     </div>
   );
 };
