@@ -14,8 +14,11 @@ const TicketCard = ({ ticket }) => {
       timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
     };
 
+    const userLocale = Intl.DateTimeFormat().resolvedOptions().locale;
+    console.log(userLocale);
+
     const date = new Date(timestamp);
-    const formattedDate = date.toLocaleString("en-IN", options);
+    const formattedDate = date.toLocaleString(userLocale, options);
 
     return formattedDate;
   }
