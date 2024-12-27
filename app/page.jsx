@@ -63,28 +63,28 @@ const Dashboard = () => {
       </div>
 
       <div>
-        {tickets.length === 0 ? <NoTicketExists /> : ""}
-        {getUniqueGroups().map((group, groupIndex) => (
-          <div key={groupIndex} className="mb-4">
-            <h2>{group}</h2>
-            <div className="lg:grid grid-cols-2 xl:grid-cols-4 gap-4">
-              {tickets
-                .filter((ticket) =>
-                  viewBy === "category"
-                    ? ticket.category === group
-                    : ticket.status === group
-                )
-                .sort((a, b) => b.priority - a.priority)
-                .map((filteredTicket, ticketIndex) => (
-                  <TicketCard
-                    id={ticketIndex}
-                    key={ticketIndex}
-                    ticket={filteredTicket}
-                  />
-                ))}
+        {tickets.length === 0 ? <NoTicketExists /> :
+          getUniqueGroups().map((group, groupIndex) => (
+            <div key={groupIndex} className="mb-4">
+              <h2>{group}</h2>
+              <div className="lg:grid grid-cols-2 xl:grid-cols-4 gap-4">
+                {tickets
+                  .filter((ticket) =>
+                    viewBy === "category"
+                      ? ticket.category === group
+                      : ticket.status === group
+                  )
+                  .sort((a, b) => b.priority - a.priority)
+                  .map((filteredTicket, ticketIndex) => (
+                    <TicketCard
+                      id={ticketIndex}
+                      key={ticketIndex}
+                      ticket={filteredTicket}
+                    />
+                  ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );
