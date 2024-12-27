@@ -15,7 +15,6 @@ const TicketCard = ({ ticket }) => {
     };
 
     const userLocale = Intl.DateTimeFormat().resolvedOptions().locale;
-    console.log(userLocale);
 
     const date = new Date(timestamp);
     const formattedDate = date.toLocaleString(userLocale, options);
