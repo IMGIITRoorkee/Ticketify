@@ -46,6 +46,7 @@ const EditTicketForm = ({ ticket }) => {
         },
         body: JSON.stringify({ formData }),
       });
+
       if (!res.ok) {
         throw new Error("Failed to update ticket");
       }
@@ -57,6 +58,7 @@ const EditTicketForm = ({ ticket }) => {
         },
         body: JSON.stringify({ formData })
       });
+
       if (!res.ok) {
         throw new Error("Failed to create ticket");
       }
@@ -76,8 +78,33 @@ const EditTicketForm = ({ ticket }) => {
   ];
   const isEditable = formData.status === "not started";
 
+  const deleteTicket = async (e) => {
+    e.preventDefault()
+    try {
+      const conf = confirm("Do you really want to delete the Ticket: " + formData.title)
+
+      if (conf) {
+        const res = await fetch(`/api/Tickets/${ticket._id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-type": "application/json",
+          }
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to delete ticket");
+        }
+        router.refresh();
+        router.push("/");
+      }
+    } catch (error) {
+      console.log(error);
+
+    }
+  }
+
   return (
-    <div className=" flex justify-center">
+    <div className="flex justify-center">
       <form
         onSubmit={handleSubmit}
         method="post"
@@ -244,11 +271,15 @@ const EditTicketForm = ({ ticket }) => {
           <option value="started">Started</option>
           <option value="done">Done</option>
         </select>
-        <input
-          type="submit"
-          className="btn max-w-xs"
-          value={EDITMODE ? "Update Ticket" : "Create Ticket"}
-        />
+        <div className="flex flex-row flex-wrap justify-between gap-2">
+          <input
+            type="submit"
+            className="btn max-w-xs"
+            value={EDITMODE ? "Update Ticket" : "Create Ticket"}
+          />
+
+          {EDITMODE ? <button className="btn max-w-xs bg-red-600 text-slate-50 hover:bg-red-700 hover:text-slate-100" onClick={deleteTicket}>Delete</button> : ""}
+        </div>
       </form>
     </div>
   );
