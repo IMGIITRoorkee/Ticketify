@@ -14,7 +14,7 @@ export async function PUT(req, { params }) {
 
     const body = await req.json();
     const ticketData = body.formData;
-    const existingTicket = await Ticket.findById(ticketId);
+    const existingTicket = await Ticket.findById(id);
 
     const updateTicketData = await Ticket.findByIdAndUpdate(id, {
       ...ticketData,
