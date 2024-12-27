@@ -6,19 +6,12 @@ const NoTicketExists = () => {
             <div
                 className="flex flex-col hover:bg-card-hover bg-card rounded-md shadow-lg p-3 m-2"
             >
-                <Link href={`/TicketPage/new`} style={{ display: "contents" }}>
-                    <h4 className="mb-1">No Tickets Found</h4>
-                    <hr className="h-px border-0 bg-page mb-2 " />
-                    <p className="whitespace-pre-wrap">No Tickets exists. Create a Ticket now.</p>
+                <h4 className="mb-1">No Tickets Found</h4>
+                <hr className="h-px border-0 bg-page mb-2 " />
+                <p className="whitespace-pre-wrap">There are currently no tickets created till now.</p>
 
-                    <div className="flex-grow"></div>
-                    {/* <div className="flex mt-2">
-              <div className="flex flex-col">
-                <p className="text-xs my-1">{createdDateTime}</p>
-                <ProgressDisplay progress={ticket.progress} />
-              </div>
-            </div> */}
-                </Link>
+                <div className="flex-grow"></div>
+                <Link href={"/TicketPage/new"} className="btn my-2 max-w-xs bg-blue-600 text-slate-50 hover:bg-blue-700 hover:text-slate-100">Create A Ticket</Link>
             </div>
         </div>
     );
