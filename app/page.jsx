@@ -56,7 +56,7 @@ const Dashboard = () => {
     setViewBy(event.target.value);
   };
 
-  const handleStatusChange = (event) => {
+  const handleStatusFilterChange = (event) => {
     setStatusFilter(event.target.value.toLowerCase());
   };
 
@@ -92,7 +92,7 @@ const Dashboard = () => {
             <select
               id="status-filter"
               value={statusFilter}
-              onChange={handleStatusChange}
+              onChange={handleStatusFilterChange}
               className="p-2 border rounded"
             >
               <option value="all">All</option>
@@ -116,8 +116,8 @@ const Dashboard = () => {
                     .sort((a, b) => b.priority - a.priority)
                     .map((filteredTicket, ticketIndex) => (
                       <TicketCard
-                        id={filteredTicket._id || ticketIndex}
-                        key={filteredTicket._id || ticketIndex}
+                        id={ticketIndex}
+                        key={ticketIndex}
                         ticket={filteredTicket}
                       />
                     ))}
