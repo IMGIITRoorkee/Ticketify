@@ -16,7 +16,7 @@ const Nav = () => {
       <div>
         
         
-        <p className=" text-default-text">Write full name of IMG</p>
+        <p className=" text-default-text">INFORMATION MANAGEMANT GROUP</p>
       </div>
     </nav>
   );
