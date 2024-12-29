@@ -29,6 +29,13 @@ const EditTicketForm = ({ ticket }) => {
     const value = e.target.value;
     const name = e.target.name;
 
+    if (name === "progress") {
+      const allowedValues = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+      if (!allowedValues.includes(parseInt(value))) {
+        return; 
+      }
+    }
+
     setFormData((preState) => ({
       ...preState,
       [name]: value,
@@ -242,6 +249,7 @@ const EditTicketForm = ({ ticket }) => {
             value={formData.progress}
             min="0"
             max="100"
+            step="10"
             onChange={handleChange}
             className="w-full" 
             disabled={!isEditable}

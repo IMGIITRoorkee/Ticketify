@@ -23,6 +23,8 @@ const ticketSchema = new Schema(
         'Software Problem',
         'Application Development',
         'Project',
+        'Bug Fix',
+        'MVP'
       ], 
     },
     priority: {
@@ -34,8 +36,10 @@ const ticketSchema = new Schema(
     progress: {
       type: Number,
       required: [true, 'Progress is required'], 
-      min: [0, 'Progress must be at least 0'], 
-      max: [100, 'Progress must be at most 100'],
+      enum: {
+        values: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+        message: 'Progress must be one of the predefined values (e.g., 0, 10, 20, ..., 100)',
+      }
     },
     status: {
       type: String,
