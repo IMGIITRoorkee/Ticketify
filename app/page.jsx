@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import TicketCard from "./(components)/TicketCard";
+import NoTicketExistsCard from "./(components)/NoTicketExistsCard";
 
 const getTickets = async () => {
   try {
@@ -22,22 +23,41 @@ const getTickets = async () => {
 
 const Dashboard = () => {
   const [tickets, setTickets] = useState([]);
-  const [viewBy, setViewBy] = useState("category"); 
+  const [filteredTickets, setFilteredTickets] = useState([]);
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [viewBy, setViewBy] = useState("category");
 
   useEffect(() => {
     const fetchTickets = async () => {
       const data = await getTickets();
-      setTickets(data?.tickets || []); 
+      setTickets(data?.tickets || []);
+      setFilteredTickets(data?.tickets || []);
     };
 
     fetchTickets();
   }, []);
 
-  const uniqueCategories = [...new Set(tickets?.map(({ category }) => category))];
+  useEffect(() => {
+    if (statusFilter === "all") {
+      setFilteredTickets(tickets);
+    } else {
+      setFilteredTickets(
+        tickets.filter((ticket) =>
+          ticket.status.toLowerCase() === statusFilter.toLowerCase()
+        )
+      );
+    }
+  }, [statusFilter, tickets]);
+
+  const uniqueCategories = [...new Set(filteredTickets?.map(({ category }) => category))];
   const uniqueStatuses = [...new Set(tickets?.map(({ status }) => status))];
 
   const handleViewByChange = (event) => {
     setViewBy(event.target.value);
+  };
+
+  const handleStatusFilterChange = (event) => {
+    setStatusFilter(event.target.value.toLowerCase());
   };
 
   const getUniqueGroups = () => {
@@ -46,44 +66,67 @@ const Dashboard = () => {
 
   return (
     <div className="p-5">
-      <div className="mb-4">
-        <label htmlFor="view-by" className="mr-2">
-          View By:
-        </label>
-        <select
-          id="view-by"
-          value={viewBy}
-          onChange={handleViewByChange}
-          className="p-2 border rounded"
-        >
-          <option value="category">Category</option>
-          <option value="status">Status</option>
-        </select>
-      </div>
-
-      <div>
-        {getUniqueGroups().map((group, groupIndex) => (
-          <div key={groupIndex} className="mb-4">
-            <h2>{group}</h2>
-            <div className="lg:grid grid-cols-2 xl:grid-cols-4 gap-4">
-              {tickets
-                .filter((ticket) =>
-                  viewBy === "category"
-                    ? ticket.category === group
-                    : ticket.status === group
-                )
-                .sort((a, b) => b.priority - a.priority)
-                .map((filteredTicket, ticketIndex) => (
-                  <TicketCard
-                    id={ticketIndex}
-                    key={ticketIndex}
-                    ticket={filteredTicket}
-                  />
-                ))}
-            </div>
+      {tickets.length === 0 ? (
+        <NoTicketExistsCard />
+      ) : (
+        <>
+          <div className="mb-4">
+            <label htmlFor="view-by" className="mr-2">
+              View By:
+            </label>
+            <select
+              id="view-by"
+              value={viewBy}
+              onChange={handleViewByChange}
+              className="p-2 border rounded"
+            >
+              <option value="category">Category</option>
+              <option value="status">Status</option>
+            </select>
           </div>
-        ))}
-      </div>
+
+          <div className="mb-4">
+            <label htmlFor="status-filter" className="mr-2">
+              Filter by Status:
+            </label>
+            <select
+              id="status-filter"
+              value={statusFilter}
+              onChange={handleStatusFilterChange}
+              className="p-2 border rounded"
+            >
+              <option value="all">All</option>
+              <option value="started">Started</option>
+              <option value="not started">Not Started</option>
+              <option value="done">Done</option>
+            </select>
+          </div>
+
+          <div>
+            {getUniqueGroups().map((group, groupIndex) => (
+              <div key={groupIndex} className="mb-4">
+                <h2>{group}</h2>
+                <div className="lg:grid grid-cols-2 xl:grid-cols-4 gap-4">
+                  {filteredTickets
+                    .filter((ticket) =>
+                      viewBy === "category"
+                        ? ticket.category === group
+                        : ticket.status === group
+                    )
+                    .sort((a, b) => b.priority - a.priority)
+                    .map((filteredTicket, ticketIndex) => (
+                      <TicketCard
+                        id={ticketIndex}
+                        key={ticketIndex}
+                        ticket={filteredTicket}
+                      />
+                    ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -46,6 +46,7 @@ const EditTicketForm = ({ ticket }) => {
         },
         body: JSON.stringify({ formData }),
       });
+
       if (!res.ok) {
         throw new Error("Failed to update ticket");
       }
@@ -57,6 +58,7 @@ const EditTicketForm = ({ ticket }) => {
         },
         body: JSON.stringify({ formData })
       });
+
       if (!res.ok) {
         throw new Error("Failed to create ticket");
       }
@@ -74,9 +76,35 @@ const EditTicketForm = ({ ticket }) => {
     "Bug Fix",
     "MVP"
   ];
+  const isEditable = formData.status === "not started";
+
+  const deleteTicket = async (e) => {
+    e.preventDefault()
+    try {
+      const conf = confirm("Do you really want to delete the Ticket: " + formData.title)
+
+      if (conf) {
+        const res = await fetch(`/api/Tickets/${ticket._id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-type": "application/json",
+          }
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to delete ticket");
+        }
+        router.refresh();
+        router.push("/");
+      }
+    } catch (error) {
+      console.log(error);
+
+    }
+  }
 
   return (
-    <div className=" flex justify-center">
+    <div className="flex justify-center">
       <form
         onSubmit={handleSubmit}
         method="post"
@@ -91,6 +119,12 @@ const EditTicketForm = ({ ticket }) => {
           onChange={handleChange}
           required={true}
           value={formData.title}
+          disabled={!isEditable}
+          title={
+            !isEditable
+              ? "Editing is disabled because the status is 'started' or 'done'."
+              : ""
+          }
         />
         <label>Description</label>
         <textarea
@@ -100,12 +134,24 @@ const EditTicketForm = ({ ticket }) => {
           required={true}
           value={formData.description}
           rows="5"
+          disabled={!isEditable}
+          title={
+          !isEditable
+            ? "Editing is disabled because the status is 'started' or 'done'."
+            : ""
+          }
         />
         <label>Category</label>
         <select
           name="category"
           value={formData.category}
           onChange={handleChange}
+          disabled={!isEditable}
+          title={
+          !isEditable
+            ? "Editing is disabled because the status is 'started' or 'done'."
+            : ""
+          }
         >
           {categories?.map((category, _index) => (
             <option key={_index} value={category}>
@@ -116,6 +162,7 @@ const EditTicketForm = ({ ticket }) => {
 
         <label>Priority</label>
         <div>
+          <label>1</label>
           <input
             id="priority-1"
             name="priority"
@@ -124,7 +171,7 @@ const EditTicketForm = ({ ticket }) => {
             value={1}
             checked={formData.priority == 1}
           />
-          <label>1</label>
+          <label>2</label>
           <input
             id="priority-2"
             name="priority"
@@ -132,8 +179,14 @@ const EditTicketForm = ({ ticket }) => {
             onChange={handleChange}
             value={2}
             checked={formData.priority == 2}
+            disabled={!isEditable}
+            title={
+            !isEditable
+              ? "Editing is disabled because the status is 'started' or 'done'."
+              : ""
+            }
           />
-          <label>2</label>
+          <label>3</label>
           <input
             id="priority-3"
             name="priority"
@@ -141,8 +194,14 @@ const EditTicketForm = ({ ticket }) => {
             onChange={handleChange}
             value={3}
             checked={formData.priority == 3}
+            disabled={!isEditable}
+            title={
+            !isEditable
+              ? "Editing is disabled because the status is 'started' or 'done'."
+              : ""
+            }
           />
-          <label>3</label>
+          <label>4</label>
           <input
             id="priority-4"
             name="priority"
@@ -150,8 +209,14 @@ const EditTicketForm = ({ ticket }) => {
             onChange={handleChange}
             value={4}
             checked={formData.priority == 4}
+            disabled={!isEditable}
+            title={
+            !isEditable
+              ? "Editing is disabled because the status is 'started' or 'done'."
+              : ""
+            }
           />
-          <label>4</label>
+          <label>5</label>
           <input
             id="priority-5"
             name="priority"
@@ -159,8 +224,14 @@ const EditTicketForm = ({ ticket }) => {
             onChange={handleChange}
             value={5}
             checked={formData.priority == 5}
+            disabled={!isEditable}
+            title={
+            !isEditable
+              ? "Editing is disabled because the status is 'started' or 'done'."
+              : ""
+            }
           />
-          <label>5</label>
+          
         </div>
         <label>Progress</label>
         <div className="relative">
@@ -173,6 +244,12 @@ const EditTicketForm = ({ ticket }) => {
             max="100"
             onChange={handleChange}
             className="w-full" 
+            disabled={!isEditable}
+            title={
+            !isEditable
+              ? "Editing is disabled because the status is 'started' or 'done'."
+              : ""
+            }
           />
           <div className="absolute top-0 left-0 right-0 flex justify-between px-2">
             <span className="text-xs">0%</span>
@@ -194,11 +271,15 @@ const EditTicketForm = ({ ticket }) => {
           <option value="started">Started</option>
           <option value="done">Done</option>
         </select>
-        <input
-          type="submit"
-          className="btn max-w-xs"
-          value={EDITMODE ? "Update Ticket" : "Create Ticket"}
-        />
+        <div className="flex flex-row flex-wrap justify-between gap-2">
+          <input
+            type="submit"
+            className="btn max-w-xs"
+            value={EDITMODE ? "Update Ticket" : "Create Ticket"}
+          />
+
+          {EDITMODE ? <button className="btn max-w-xs bg-red-600 text-slate-50 hover:bg-red-700 hover:text-slate-100" onClick={deleteTicket}>Delete</button> : ""}
+        </div>
       </form>
     </div>
   );
