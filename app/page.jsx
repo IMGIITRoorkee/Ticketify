@@ -130,6 +130,7 @@ const Dashboard = () => {
                     <h2 className="font-bold">{group}</h2>
                     <FontAwesomeIcon
                       icon={groupVisibility[group] ? faChevronDown : faChevronRight}
+                      className="icon"
                     />
                   </div>
 
