@@ -43,7 +43,7 @@ const TicketCard = ({ ticket }) => {
           <div className="flex flex-col">
             <p className="text-xs my-1"><b>Created At:</b> {createdDateTime}</p>
             <p className="text-xs my-1"><b>Last Updated At:</b> {updatedDateTime}</p>
-            <ProgressDisplay progress={ticket.progress} />
+            {ticket.status === "done" ? "" : <ProgressDisplay progress={ticket.progress} />}
           </div>
         </div>
       </Link>
