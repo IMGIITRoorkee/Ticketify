@@ -31,7 +31,7 @@ const Nav = () => {
       <div>
         
         
-        <p className=" text-default-text">INFORMATION MANAGEMANT GROUP</p>
+        <p className=" text-default-text">INFORMATION MANAGEMENT GROUP</p>
       </div>
     </nav>
   );
