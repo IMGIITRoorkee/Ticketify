@@ -242,6 +242,7 @@ const EditTicketForm = ({ ticket }) => {
             value={formData.progress}
             min="0"
             max="100"
+            step="10"
             onChange={handleChange}
             className="w-full" 
             disabled={!isEditable}

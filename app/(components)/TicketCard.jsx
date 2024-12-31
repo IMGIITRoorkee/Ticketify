@@ -23,6 +23,7 @@ const TicketCard = ({ ticket }) => {
   }
 
   const createdDateTime = formatTimestamp(ticket.createdAt);
+  const updatedDateTime = formatTimestamp(ticket.updatedAt);
 
   return (
     <div
@@ -40,7 +41,8 @@ const TicketCard = ({ ticket }) => {
         <div className="flex-grow"></div>
         <div className="flex mt-2">
           <div className="flex flex-col">
-            <p className="text-xs my-1">{createdDateTime}</p>
+            <p className="text-xs my-1"><b>Created At:</b> {createdDateTime}</p>
+            <p className="text-xs my-1"><b>Last Updated At:</b> {updatedDateTime}</p>
             {ticket.status === "done" ? "" : <ProgressDisplay progress={ticket.progress} />}
           </div>
         </div>
