@@ -27,9 +27,14 @@ const TicketCard = ({ ticket }) => {
 
   return (
     <div
-      className={`flex flex-col hover:bg-card-hover bg-card rounded-md shadow-lg p-3 m-2 ${ticket.status === "done" ? "bg-green-700" : ""} ${ticket.priority > 4 ? 'bg-red-500' : ''
-        } ${ticket.status === "started" ? "bg-slate-700" : ""}`}
-    >
+      className={`flex flex-col justify-center text-center ${ticket.status === "done"
+        ? "dark:bg-green-700 bg-green-500 hover:bg-green-600 dark:hover:bg-green-800"
+        : ticket.priority > 4
+          ? "dark:bg-red-700 bg-red-500 hover:bg-red-600 dark:hover:bg-red-800"
+          : ticket.status === "started"
+            ? "dark:bg-slate-700 bg-slate-400 hover:bg-slate-500 dark:hover:bg-slate-800"
+            : "dark:hover:bg-card-hover dark:bg-card bg-light-card hover:bg-light-card-hover"
+        } rounded-md shadow-lg p-3 m-2`}>
       <div className="flex mb-3">
         <PriorityDisplay priority={ticket.priority} />
       </div>
