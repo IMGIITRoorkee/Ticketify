@@ -1,10 +1,13 @@
 import Ticket from "@/app/models/Ticket";
-import getRedisClient from "@/app/redisClient";
+import { createClient } from 'redis';
 import { NextResponse } from "next/server";
 
 export async function GET() {
   const cacheKey = "tickets";
-  const redisClient = await getRedisClient();
+  const redisClient = createClient();
+  redisClient.on('error', err => console.log('Redis Client Error', err));
+
+  await redisClient.connect();
 
   try {
     const cachedData = await redisClient.get(cacheKey);
