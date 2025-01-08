@@ -16,8 +16,8 @@ const getTickets = async () => {
 
     return res.json();
   } catch (error) {
-    console.log("Error loading tickets: ", error);
-    return { tickets: [] }; 
+    console.error("Error loading tickets: ", error);
+    return { tickets: [] };
   }
 };
 
@@ -26,15 +26,39 @@ const Dashboard = () => {
   const [filteredTickets, setFilteredTickets] = useState([]);
   const [statusFilter, setStatusFilter] = useState("all");
   const [viewBy, setViewBy] = useState("category");
+  const [isLoading, setIsLoading] = useState(true);
+  const timeout = 5000;
 
   useEffect(() => {
-    const fetchTickets = async () => {
-      const data = await getTickets();
-      setTickets(data?.tickets || []);
-      setFilteredTickets(data?.tickets || []);
+    const fetchTicketsWithTimeout = async () => {
+      setIsLoading(true);
+      let timeoutId;
+
+      try {
+        const ticketsPromise = getTickets();
+        timeoutId = setTimeout(() => {
+          setTickets([]);
+          setFilteredTickets([]);
+          setIsLoading(false);
+        }, timeout);
+
+        const data = await ticketsPromise;
+        clearTimeout(timeoutId);
+
+        setTickets(data?.tickets || []);
+        setFilteredTickets(data?.tickets || []);
+      } catch (error) {
+        console.error("Error fetching tickets:", error);
+        setTickets([]);
+        setFilteredTickets([]);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    fetchTickets();
+    fetchTicketsWithTimeout();
+
+    return () => clearTimeout(timeoutId);
   }, []);
 
   useEffect(() => {
@@ -63,6 +87,17 @@ const Dashboard = () => {
   const getUniqueGroups = () => {
     return viewBy === "category" ? uniqueCategories : uniqueStatuses;
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <div className="spinner-border animate-spin inline-block w-16 h-16 border-8 rounded-full border-t-blue-600 border-r-transparent border-b-blue-600 border-l-transparent"></div>
+        <p className="mt-4 text-lg font-medium text-dark-gray-700">
+          Loading tickets, please wait...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="p-5">
