@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import TicketCard from "./(components)/TicketCard";
 import NoTicketExistsCard from "./(components)/NoTicketExistsCard";
 
@@ -28,11 +30,13 @@ const Dashboard = () => {
   const [viewBy, setViewBy] = useState("category");
   const [isLoading, setIsLoading] = useState(true);
   const timeout = 5000;
+  const [groupVisibility, setGroupVisibility] = useState({});
 
   useEffect(() => {
+    let timeoutId;
+
     const fetchTicketsWithTimeout = async () => {
       setIsLoading(true);
-      let timeoutId;
 
       try {
         const ticketsPromise = getTickets();
@@ -58,7 +62,9 @@ const Dashboard = () => {
 
     fetchTicketsWithTimeout();
 
-    return () => clearTimeout(timeoutId);
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, []);
 
   useEffect(() => {
@@ -78,6 +84,7 @@ const Dashboard = () => {
 
   const handleViewByChange = (event) => {
     setViewBy(event.target.value);
+    setGroupVisibility({});
   };
 
   const handleStatusFilterChange = (event) => {
@@ -86,6 +93,13 @@ const Dashboard = () => {
 
   const getUniqueGroups = () => {
     return viewBy === "category" ? uniqueCategories : uniqueStatuses;
+  };
+
+  const toggleGroupVisibility = (group) => {
+    setGroupVisibility((prevState) => ({
+      ...prevState,
+      [group]: !prevState[group],
+    }));
   };
 
   if (isLoading) {
@@ -138,27 +152,46 @@ const Dashboard = () => {
           </div>
 
           <div>
-            {getUniqueGroups().map((group, groupIndex) => (
-              <div key={groupIndex} className="mb-4">
-                <h2>{group}</h2>
-                <div className="lg:grid grid-cols-2 xl:grid-cols-4 gap-4">
-                  {filteredTickets
-                    .filter((ticket) =>
-                      viewBy === "category"
-                        ? ticket.category === group
-                        : ticket.status === group
-                    )
-                    .sort((a, b) => b.priority - a.priority)
-                    .map((filteredTicket, ticketIndex) => (
-                      <TicketCard
-                        id={ticketIndex}
-                        key={ticketIndex}
-                        ticket={filteredTicket}
-                      />
-                    ))}
+            {getUniqueGroups().map((group, groupIndex) => {
+              const groupTickets = filteredTickets.filter((ticket) =>
+                viewBy === "category"
+                  ? ticket.category === group
+                  : ticket.status === group
+              );
+
+              return (
+                <div key={groupIndex} className="mb-4">
+                  <div
+                    className="flex justify-between items-center cursor-pointer bg-black-200 p-2 rounded"
+                    onClick={() => toggleGroupVisibility(group)}
+                  >
+                    <h2 className="font-bold">{group}</h2>
+                    <FontAwesomeIcon
+                      icon={groupVisibility[group] ? faChevronDown : faChevronRight}
+                      className="icon"
+                    />
+                  </div>
+
+                  <div className="lg:grid grid-cols-2 xl:grid-cols-4 gap-4 mt-2">
+                    {groupTickets
+                      .slice(0, groupVisibility[group] ? groupTickets.length : 4)
+                      .map((ticket, ticketIndex) => (
+                        <TicketCard
+                          id={ticketIndex}
+                          key={ticketIndex}
+                          ticket={ticket}
+                        />
+                      ))}
+                  </div>
+
+                  {!groupVisibility[group] && groupTickets.length > 4 && (
+                    <div className="text-center text-sm text-gray-500 mt-2">
+                      + {groupTickets.length - 4} more tickets
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </>
       )}
