@@ -60,6 +60,10 @@ const Nav = () => {
       )}
 
       <div className="flex items-center space-x-2">
+        <button onClick={toggleTheme}>
+          <FontAwesomeIcon icon={theme === "dark" ? faSun : faMoon} className="icon text-white" />
+        </button>
+
         <Link href="http://img.iitr.ac.in/" target="_blank">
           <img
             src="/img-logo.png"

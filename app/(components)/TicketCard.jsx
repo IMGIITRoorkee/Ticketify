@@ -28,7 +28,7 @@ const TicketCard = ({ ticket }) => {
   return (
     <Link href={`/TicketPage/${ticket._id}`} style={{ display: "contents" }}>
       <div
-        className={`flex flex-col justify-center text-center ${ticket.status === "done"
+        className={`flex flex-col ${ticket.status === "done"
           ? "dark:bg-green-700 bg-green-500 hover:bg-green-600 dark:hover:bg-green-800"
           : ticket.priority > 4
             ? "dark:bg-red-700 bg-red-500 hover:bg-red-600 dark:hover:bg-red-800"
