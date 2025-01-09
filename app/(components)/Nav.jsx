@@ -33,6 +33,7 @@ const Nav = () => {
           {tooltip}
         </div>
       )}
+
       <div className="flex items-center space-x-2">
         <Link href="http://img.iitr.ac.in/" target="_blank">
           <img
@@ -41,7 +42,8 @@ const Nav = () => {
             className="w-8 h-8 cursor-pointer"
           />
         </Link>
-        <p className="text-default-text">INFORMATION MANAGEMANT GROUP</p>
+        <p className="text-default-text">INFORMATION MANAGEMENT GROUP</p>
+ 
       </div>
     </nav>
   );
