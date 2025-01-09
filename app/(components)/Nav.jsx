@@ -3,8 +3,13 @@ import { faHome, faTicket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import React, { useState } from 'react';
+import { usePathname } from "next/navigation";
 
 const Nav = () => {
+  const currentPath = usePathname()
+
+  const isActive = (href) => currentPath === href;
+
   const [tooltip, setTooltip] = useState(null);
 
   const showTooltip = (content) => setTooltip(content);
@@ -13,14 +18,14 @@ const Nav = () => {
     <nav className="flex justify-between bg-nav p-4">
       <div className="flex items-center space-x-4">
         <Link href="/"
-        onMouseEnter={() => showTooltip('Home')}
-        onMouseLeave={hideTooltip}>
-          <FontAwesomeIcon icon={faHome} className="icon" />
+          onMouseEnter={() => showTooltip('Home')}
+          onMouseLeave={hideTooltip}>
+          <FontAwesomeIcon icon={faHome} className={`icon ${isActive("/") ? "text-white" : "text-gray-500"}`} />
         </Link>
         <Link href="/TicketPage/new"
-        onMouseEnter={() => showTooltip('Create a new ticket')}
-        onMouseLeave={hideTooltip}>
-          <FontAwesomeIcon icon={faTicket} className="icon" />
+          onMouseEnter={() => showTooltip('Create a new ticket')}
+          onMouseLeave={hideTooltip}>
+          <FontAwesomeIcon icon={faTicket} className={`icon ${isActive("/TicketPage/new") ? "text-white" : "text-gray-500"}`} />
         </Link>
       </div>
       {tooltip && (
@@ -28,10 +33,10 @@ const Nav = () => {
           {tooltip}
         </div>
       )}
-      <div>
-        
+      <div>       
         
         <p className=" text-default-text">INFORMATION MANAGEMENT GROUP</p>
+        
       </div>
     </nav>
   );
