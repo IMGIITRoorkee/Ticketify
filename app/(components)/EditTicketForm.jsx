@@ -74,7 +74,8 @@ const EditTicketForm = ({ ticket }) => {
     "Application Deveopment",
     "Project",
     "Bug Fix",
-    "MVP"
+    "MVP",
+    "Backlog"
   ];
   const isEditable = formData.status === "not started";
 

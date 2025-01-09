@@ -3,8 +3,13 @@ import { faHome, faMoon, faSun, faTicket } from "@fortawesome/free-solid-svg-ico
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import React, { useState, useEffect } from 'react';
+import { usePathname } from "next/navigation";
 
 const Nav = () => {
+  const currentPath = usePathname()
+
+  const isActive = (href) => currentPath === href;
+
   const [tooltip, setTooltip] = useState(null);
   const [theme, setTheme] = useState("light");
 
@@ -40,12 +45,12 @@ const Nav = () => {
         <Link href="/"
           onMouseEnter={() => showTooltip('Home')}
           onMouseLeave={hideTooltip}>
-          <FontAwesomeIcon icon={faHome} className="icon text-white" />
+          <FontAwesomeIcon icon={faHome} className={`icon ${isActive("/") ? "text-white" : "text-gray-500"}`} />
         </Link>
         <Link href="/TicketPage/new"
           onMouseEnter={() => showTooltip('Create a new ticket')}
           onMouseLeave={hideTooltip}>
-          <FontAwesomeIcon icon={faTicket} className="icon text-white" />
+          <FontAwesomeIcon icon={faTicket} className={`icon ${isActive("/TicketPage/new") ? "text-white" : "text-gray-500"}`} />
         </Link>
       </div>
       {tooltip && (
@@ -59,7 +64,7 @@ const Nav = () => {
           <FontAwesomeIcon icon={theme === "dark" ? faSun : faMoon} className="icon text-white" />
         </button>
         <div>
-          <p className=" text-default-text">INFORMATION MANAGEMANT GROUP</p>
+          <p className=" text-default-text">INFORMATION MANAGEMENT GROUP</p>
         </div>
       </div>
     </nav>
