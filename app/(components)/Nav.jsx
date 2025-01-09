@@ -45,12 +45,12 @@ const Nav = () => {
         <Link href="/"
           onMouseEnter={() => showTooltip('Home')}
           onMouseLeave={hideTooltip}>
-          <FontAwesomeIcon icon={faHome} className={`icon ${isActive("/") ? "text-white" : "text-gray-500"}`} />
+          <FontAwesomeIcon icon={faHome} className={`icon ${isActive("/") ? "text-white dark:text-white" : "text-gray-500 dark:text-gray-500"}`} />
         </Link>
         <Link href="/TicketPage/new"
           onMouseEnter={() => showTooltip('Create a new ticket')}
           onMouseLeave={hideTooltip}>
-          <FontAwesomeIcon icon={faTicket} className={`icon ${isActive("/TicketPage/new") ? "text-white" : "text-gray-500"}`} />
+          <FontAwesomeIcon icon={faTicket} className={`icon ${isActive("/TicketPage/new") ? "text-white dark:text-white" : "text-gray-500 dark:text-gray-500"}`} />
         </Link>
       </div>
       {tooltip && (
