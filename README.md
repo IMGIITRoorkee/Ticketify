@@ -28,11 +28,17 @@ npm install
 
 ### 4. Create `.env.local` File
 1. Inside the project directory, create a file named `.env.local`.
-2. Add the following environment variable:
+2. Add the following environment variables:
    ```env
    MONGODB_URI=<your-mongodb-atlas-uri>
    ```
    Replace `<your-mongodb-atlas-uri>` with the connection string you obtained from MongoDB Atlas.
+   
+   ```env
+   TICKETS_NO=<no-of-tickets-to-be-shown-per-page-by-default>
+   ```
+
+   Replace `<no-of-tickets-to-be-shown-per-page-by-default>` with the number of tickets you want to show by default per page.
 
 ### 5. Start the Development Server
 ```bash

@@ -74,7 +74,8 @@ const EditTicketForm = ({ ticket }) => {
     "Application Deveopment",
     "Project",
     "Bug Fix",
-    "MVP"
+    "MVP",
+    "Backlog"
   ];
   const isEditable = formData.status === "not started";
 
@@ -242,6 +243,7 @@ const EditTicketForm = ({ ticket }) => {
             value={formData.progress}
             min="0"
             max="100"
+            step="10"
             onChange={handleChange}
             className="w-full" 
             disabled={!isEditable}
