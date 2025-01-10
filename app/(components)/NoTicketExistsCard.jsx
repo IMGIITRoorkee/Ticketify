@@ -4,7 +4,7 @@ const NoTicketExistsCard = () => {
     return (
         <div className="lg:grid grid-cols-2 xl:grid-cols-4 gap-4">
             <div
-                className="flex flex-col justify-center text-center hover:bg-card-hover bg-card rounded-md shadow-lg p-3 m-2"
+                className="flex flex-col justify-center text-center dark:hover:bg-card-hover dark:bg-card bg-light-card hover:bg-light-card-hover rounded-md shadow-lg p-3 m-2"
             >
                 <h4 className="mb-1">No Tickets Found</h4>
                 <hr className="h-px border-0 bg-page mb-2 " />

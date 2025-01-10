@@ -137,9 +137,9 @@ const EditTicketForm = ({ ticket }) => {
           rows="5"
           disabled={!isEditable}
           title={
-          !isEditable
-            ? "Editing is disabled because the status is 'started' or 'done'."
-            : ""
+            !isEditable
+              ? "Editing is disabled because the status is 'started' or 'done'."
+              : ""
           }
         />
         <label>Category</label>
@@ -149,9 +149,9 @@ const EditTicketForm = ({ ticket }) => {
           onChange={handleChange}
           disabled={!isEditable}
           title={
-          !isEditable
-            ? "Editing is disabled because the status is 'started' or 'done'."
-            : ""
+            !isEditable
+              ? "Editing is disabled because the status is 'started' or 'done'."
+              : ""
           }
         >
           {categories?.map((category, _index) => (
@@ -182,9 +182,9 @@ const EditTicketForm = ({ ticket }) => {
             checked={formData.priority == 2}
             disabled={!isEditable}
             title={
-            !isEditable
-              ? "Editing is disabled because the status is 'started' or 'done'."
-              : ""
+              !isEditable
+                ? "Editing is disabled because the status is 'started' or 'done'."
+                : ""
             }
           />
           <label>3</label>
@@ -197,9 +197,9 @@ const EditTicketForm = ({ ticket }) => {
             checked={formData.priority == 3}
             disabled={!isEditable}
             title={
-            !isEditable
-              ? "Editing is disabled because the status is 'started' or 'done'."
-              : ""
+              !isEditable
+                ? "Editing is disabled because the status is 'started' or 'done'."
+                : ""
             }
           />
           <label>4</label>
@@ -212,9 +212,9 @@ const EditTicketForm = ({ ticket }) => {
             checked={formData.priority == 4}
             disabled={!isEditable}
             title={
-            !isEditable
-              ? "Editing is disabled because the status is 'started' or 'done'."
-              : ""
+              !isEditable
+                ? "Editing is disabled because the status is 'started' or 'done'."
+                : ""
             }
           />
           <label>5</label>
@@ -227,12 +227,12 @@ const EditTicketForm = ({ ticket }) => {
             checked={formData.priority == 5}
             disabled={!isEditable}
             title={
-            !isEditable
-              ? "Editing is disabled because the status is 'started' or 'done'."
-              : ""
+              !isEditable
+                ? "Editing is disabled because the status is 'started' or 'done'."
+                : ""
             }
           />
-          
+
         </div>
         <label>Progress</label>
         <div className="relative">
@@ -245,12 +245,12 @@ const EditTicketForm = ({ ticket }) => {
             max="100"
             step="10"
             onChange={handleChange}
-            className="w-full" 
+            className="w-full"
             disabled={!isEditable}
             title={
-            !isEditable
-              ? "Editing is disabled because the status is 'started' or 'done'."
-              : ""
+              !isEditable
+                ? "Editing is disabled because the status is 'started' or 'done'."
+                : ""
             }
           />
           <div className="absolute top-0 left-0 right-0 flex justify-between px-2">
@@ -280,7 +280,7 @@ const EditTicketForm = ({ ticket }) => {
             value={EDITMODE ? "Update Ticket" : "Create Ticket"}
           />
 
-          {EDITMODE ? <button className="btn max-w-xs bg-red-600 text-slate-50 hover:bg-red-700 hover:text-slate-100" onClick={deleteTicket}>Delete</button> : ""}
+          {EDITMODE ? <button className="btn max-w-xs bg-red-600 dark:bg-red-600 text-slate-50 hover:bg-red-700 dark:hover:bg-red-700 hover:text-slate-100" onClick={deleteTicket}>Delete</button> : ""}
         </div>
       </form>
     </div>
