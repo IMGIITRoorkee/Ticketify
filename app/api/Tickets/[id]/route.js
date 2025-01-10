@@ -1,85 +1,48 @@
 import Ticket from "@/app/models/Ticket";
 import { NextResponse } from "next/server";
 
-export async function GET(req) {
-  try {
-    const url = new URL(req.url);
-    const ids = url.searchParams.get("ids");
+export async function GET(request, { params }) {
+  const { id } = params;
 
-    if (!ids) {
-      return NextResponse.json(
-        { message: "No ticket IDs provided" },
-        { status: 400 }
-      );
-    }
-
-    const idArray = ids.split(","); // Parse comma-separated IDs
-    const foundTickets = await Ticket.find({ _id: { $in: idArray } });
-
-    return NextResponse.json({ tickets: foundTickets }, { status: 200 });
-  } catch (error) {
-    console.log(error);
-    return NextResponse.json({ message: "Error", error }, { status: 500 });
-  }
+  const foundTicket = await Ticket.findOne({ _id: id });
+  return NextResponse.json({ foundTicket }, { status: 200 });
 }
 
-export async function PUT(req) {
+export async function PUT(req, { params }) {
   try {
+    const { id } = params;
+
     const body = await req.json();
-    const { ids, updateData } = body;
+    const ticketData = body.formData;
+    const existingTicket = await Ticket.findById(id);
 
-    if (!ids || !ids.length) {
-      return NextResponse.json(
-        { message: "No ticket IDs provided" },
-        { status: 400 }
-      );
-    }
+    const updateTicketData = await Ticket.findByIdAndUpdate(id, {
+      ...ticketData,
+    });
+    if (existingTicket.status !== "not started") {
+      const { title, description, category, priority } = ticketData;
 
-    const tickets = await Ticket.find({ _id: { $in: ids } });
-
-    // Validate and update tickets
-    for (const ticket of tickets) {
-      if (ticket.status !== "not started") {
-        const { title, description, category, priority } = updateData;
-
-        if (
-          title !== ticket.title ||
-          description !== ticket.description ||
-          category !== ticket.category ||
-          priority !== ticket.priority
-        ) {
-          return NextResponse.json(
-            { message: "Cannot edit fields once the status is not 'not started'" },
-            { status: 400 }
-          );
-        }
+      if (title !== existingTicket.title || description !== existingTicket.description || category !== existingTicket.category || priority !== existingTicket.priority) {
+        return NextResponse.json(
+          { message: "Cannot edit fields once the status is not 'not started'" },
+          { status: 400 }
+        );
       }
-
-      // Update ticket
-      await Ticket.findByIdAndUpdate(ticket._id, { ...updateData });
     }
 
-    return NextResponse.json({ message: "Tickets updated" }, { status: 200 });
+    return NextResponse.json({ message: "Ticket updated" }, { status: 200 });
   } catch (error) {
     console.log(error);
     return NextResponse.json({ message: "Error", error }, { status: 500 });
   }
 }
 
-export async function DELETE(req) {
+export async function DELETE(req, { params }) {
   try {
-    const body = await req.json();
-    const { ids } = body;
+    const { id } = params;
 
-    if (!ids || !ids.length) {
-      return NextResponse.json(
-        { message: "No ticket IDs provided" },
-        { status: 400 }
-      );
-    }
-
-    await Ticket.deleteMany({ _id: { $in: ids } });
-    return NextResponse.json({ message: "Tickets deleted" }, { status: 200 });
+    await Ticket.findByIdAndDelete(id);
+    return NextResponse.json({ message: "Ticket Deleted" }, { status: 200 });
   } catch (error) {
     console.log(error);
     return NextResponse.json({ message: "Error", error }, { status: 500 });
