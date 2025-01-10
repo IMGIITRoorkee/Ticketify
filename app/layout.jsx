@@ -1,10 +1,9 @@
-"use client"; // Mark this as a Client Component
+"use client";
 
 import Nav from "./(components)/Nav";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
-
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 

@@ -10,7 +10,7 @@ export const authOptions = {
   ],
   callbacks: {
     async session({ session, token }) {
-      session.user.id = token.sub; // Attach user ID to the session
+      session.user.id = token.sub;
       return session;
     },
   },
