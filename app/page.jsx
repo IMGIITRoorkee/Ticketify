@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import TicketCard from "./(components)/TicketCard";
 import NoTicketExistsCard from "./(components)/NoTicketExistsCard";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const getTickets = async () => {
   try {
@@ -24,11 +26,19 @@ const getTickets = async () => {
 };
 
 const Dashboard = () => {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [tickets, setTickets] = useState([]);
   const [filteredTickets, setFilteredTickets] = useState([]);
   const [statusFilter, setStatusFilter] = useState("all");
   const [viewBy, setViewBy] = useState("category");
   const [groupVisibility, setGroupVisibility] = useState({});
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/auth/signin"); // Redirect unauthenticated users to the login page
+    }
+  }, [status, router]);
 
   useEffect(() => {
     const fetchTickets = async () => {
@@ -37,8 +47,10 @@ const Dashboard = () => {
       setFilteredTickets(data?.tickets || []);
     };
 
-    fetchTickets();
-  }, []);
+    if (session) {
+      fetchTickets();
+    }
+  }, [session]);
 
   useEffect(() => {
     if (statusFilter === "all") {
@@ -74,6 +86,10 @@ const Dashboard = () => {
       [group]: !prevState[group],
     }));
   };
+
+  if (status === "loading") {
+    return <div>Loading...</div>; // Show a loading state while the session is being checked
+  }
 
   return (
     <div className="p-5">
