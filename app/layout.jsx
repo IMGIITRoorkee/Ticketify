@@ -1,5 +1,4 @@
 "use client";
-
 import Nav from "./(components)/Nav";
 import "./globals.css";
 import { Inter } from "next/font/google";
@@ -11,6 +10,11 @@ config.autoAddCss = false;
 
 const inter = Inter({ subsets: ["latin"] });
 
+const metadata = {
+  title: "Ticket System",
+  description: "Creating a functional ticketing system.",
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
@@ -18,7 +22,7 @@ export default function RootLayout({ children }) {
         <SessionProvider>
           <div className="flex flex-col h-screen max-h-screen">
             <Nav />
-            <div className="flex-grow overflow-y-auto bg-page text-default-text">
+            <div className="flex-grow overflow-y-auto bg-light-page dark:bg-page text-light-default-text dark:text-default-text">
               {children}
             </div>
           </div>
