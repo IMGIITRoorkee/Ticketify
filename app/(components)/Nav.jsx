@@ -1,9 +1,8 @@
-"use client";
-
-import { faHome, faTicket } from "@fortawesome/free-solid-svg-icons";
+"use client"
+import { faHome, faMoon, faSun, faTicket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 
@@ -14,34 +13,47 @@ const Nav = () => {
   const isActive = (href) => currentPath === href;
 
   const [tooltip, setTooltip] = useState(null);
+  const [theme, setTheme] = useState("light");
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    setTheme(savedTheme);
+    if (savedTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
 
   const showTooltip = (content) => setTooltip(content);
   const hideTooltip = () => setTooltip(null);
 
   return (
-    <nav className="flex justify-between bg-nav p-4">
+    <nav className="flex justify-between dark:bg-nav bg-light-nav p-4">
       <div className="flex items-center space-x-4">
-        <Link
-          href="/"
-          onMouseEnter={() => showTooltip("Home")}
-          onMouseLeave={hideTooltip}
-        >
-          <FontAwesomeIcon
-            icon={faHome}
-            className={`icon ${isActive("/") ? "text-white" : "text-gray-500"}`}
-          />
+        <Link href="/"
+          onMouseEnter={() => showTooltip('Home')}
+          onMouseLeave={hideTooltip}>
+          <FontAwesomeIcon icon={faHome} className={`icon ${isActive("/") ? "text-white dark:text-white" : "text-gray-500 dark:text-gray-500"}`} />
         </Link>
-        <Link
-          href="/TicketPage/new"
-          onMouseEnter={() => showTooltip("Create a new ticket")}
-          onMouseLeave={hideTooltip}
-        >
-          <FontAwesomeIcon
-            icon={faTicket}
-            className={`icon ${
-              isActive("/TicketPage/new") ? "text-white" : "text-gray-500"
-            }`}
-          />
+        <Link href="/TicketPage/new"
+          onMouseEnter={() => showTooltip('Create a new ticket')}
+          onMouseLeave={hideTooltip}>
+          <FontAwesomeIcon icon={faTicket} className={`icon ${isActive("/TicketPage/new") ? "text-white dark:text-white" : "text-gray-500 dark:text-gray-500"}`} />
         </Link>
       </div>
       {tooltip && (
