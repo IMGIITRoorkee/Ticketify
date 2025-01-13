@@ -44,7 +44,6 @@ const Nav = () => {
 
   return (
     <nav className="flex flex-col dark:bg-nav bg-light-nav p-4">
-      {/* Top Section: Heading, IMG Logo, and Theme Toggle */}
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center space-x-2">
           <Link href="http://img.iitr.ac.in/" target="_blank">
@@ -61,7 +60,6 @@ const Nav = () => {
         </button>
       </div>
 
-      {/* Navigation Links */}
       <div className="flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <Link href="/"
@@ -82,7 +80,6 @@ const Nav = () => {
           </div>
         )}
 
-        {/* User Session Section */}
         <div>
           {session ? (
             <div className="text-right">

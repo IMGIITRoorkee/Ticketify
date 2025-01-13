@@ -36,7 +36,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      router.push("/auth/signin"); // Redirect unauthenticated users to the login page
+      router.push("/auth/signin");
     }
   }, [status, router]);
 
@@ -88,7 +88,7 @@ const Dashboard = () => {
   };
 
   if (status === "loading") {
-    return <div>Loading...</div>; // Show a loading state while the session is being checked
+    return <div>Loading...</div>;
   }
 
   return (
