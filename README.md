@@ -40,6 +40,14 @@ npm install
 
    Replace `<no-of-tickets-to-be-shown-per-page-by-default>` with the number of tickets you want to show by default per page.
 
+   ```env
+   # Redis Configuration
+   REDIS_HOST=127.0.0.1  # Replace with your Redis server's IP or hostname
+   REDIS_PORT=6379       # Default Redis port
+   ```
+- Install and configure Redis on your local machine or use a cloud-hosted Redis instance.
+- Replace `<REDIS_HOST>` and `<REDIS_PORT>` with the appropriate values for your Redis server.
+
 ### 5. Start the Development Server
 ```bash
 npm run dev
