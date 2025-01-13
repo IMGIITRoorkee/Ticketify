@@ -33,24 +33,24 @@ const Dashboard = () => {
   const [groupVisibility, setGroupVisibility] = useState({});
 
   useEffect(() => {
-    let timeoutId;
+    let ticketFetchTimeout;
 
     const fetchTicketsWithTimeout = async () => {
       setIsLoading(true);
 
       try {
         const ticketsPromise = getTickets();
-        timeoutId = setTimeout(() => {
+        ticketFetchTimeout = setTimeout(() => {
           setTickets([]);
           setFilteredTickets([]);
           setIsLoading(false);
         }, timeout);
 
         const data = await ticketsPromise;
-        clearTimeout(timeoutId);
+        clearTimeout(ticketFetchTimeout);
 
-        setTickets(data?.tickets || []);
-        setFilteredTickets(data?.tickets || []);
+        setTickets(data.tickets);
+        setFilteredTickets(data.tickets);
       } catch (error) {
         console.error("Error fetching tickets:", error);
         setTickets([]);
@@ -63,7 +63,7 @@ const Dashboard = () => {
     fetchTicketsWithTimeout();
 
     return () => {
-      if (timeoutId) clearTimeout(timeoutId);
+      if (ticketFetchTimeout) clearTimeout(ticketFetchTimeout);
     };
   }, []);
 
