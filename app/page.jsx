@@ -20,7 +20,7 @@ const getTickets = async () => {
 
     return res.json();
   } catch (error) {
-    console.log("Error loading tickets: ", error);
+    console.error("Error loading tickets: ", error);
     return { tickets: [] };
   }
 };
@@ -32,6 +32,8 @@ const Dashboard = () => {
   const [filteredTickets, setFilteredTickets] = useState([]);
   const [statusFilter, setStatusFilter] = useState("all");
   const [viewBy, setViewBy] = useState("category");
+  const [isLoading, setIsLoading] = useState(true);
+  const timeout = 5000;
   const [groupVisibility, setGroupVisibility] = useState({});
 
   useEffect(() => {
@@ -41,16 +43,41 @@ const Dashboard = () => {
   }, [status, router]);
 
   useEffect(() => {
-    const fetchTickets = async () => {
-      const data = await getTickets();
-      setTickets(data?.tickets || []);
-      setFilteredTickets(data?.tickets || []);
+    let ticketFetchTimeout;
+
+    const fetchTicketsWithTimeout = async () => {
+      if (!session) return;
+
+      setIsLoading(true);
+
+      try {
+        const ticketsPromise = getTickets();
+        ticketFetchTimeout = setTimeout(() => {
+          setTickets([]);
+          setFilteredTickets([]);
+          setIsLoading(false);
+        }, timeout);
+
+        const data = await ticketsPromise;
+        clearTimeout(ticketFetchTimeout);
+
+        setTickets(data.tickets || []);
+        setFilteredTickets(data.tickets || []);
+      } catch (error) {
+        console.error("Error fetching tickets:", error);
+        setTickets([]);
+        setFilteredTickets([]);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    if (session) {
-      fetchTickets();
-    }
-  }, [session]);
+    fetchTicketsWithTimeout();
+
+    return () => {
+      if (ticketFetchTimeout) clearTimeout(ticketFetchTimeout);
+    };
+  }, [session, timeout]);
 
   useEffect(() => {
     if (statusFilter === "all") {
@@ -87,8 +114,15 @@ const Dashboard = () => {
     }));
   };
 
-  if (status === "loading") {
-    return <div>Loading...</div>;
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <div className="spinner-border animate-spin inline-block w-16 h-16 border-8 rounded-full border-t-blue-600 border-r-transparent border-b-blue-600 border-l-transparent"></div>
+        <p className="mt-4 text-lg font-medium text-dark-gray-700">
+          Loading tickets, please wait...
+        </p>
+      </div>
+    );
   }
 
   return (

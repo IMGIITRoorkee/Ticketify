@@ -46,6 +46,13 @@ npm install
    GOOGLE_CLIENT_SECRET=<your-google-client-secret>
    ```
    Replace `<your-google-client-id>` with the Google OAuth client ID and `<your-google-client-secret>` with Google OAuth client secret.
+   ```env
+   # Redis Configuration
+   REDIS_HOST=127.0.0.1  # Replace with your Redis server's IP or hostname
+   REDIS_PORT=6379       # Default Redis port
+   ```
+- Install and configure Redis on your local machine or use a cloud-hosted Redis instance.
+- Replace `<REDIS_HOST>` and `<REDIS_PORT>` with the appropriate values for your Redis server.
 
 ### 5. Start the Development Server
 ```bash

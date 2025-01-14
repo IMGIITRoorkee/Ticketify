@@ -1,29 +1,50 @@
 import Ticket from "@/app/models/Ticket";
+import { createClient } from 'redis';
 import { NextResponse } from "next/server";
 
 export async function GET(req) {
+  const cacheKey = "tickets";
+  const redisClient = createClient();
+  redisClient.on('error', err => console.log('Redis Client Error', err));
+
+  await redisClient.connect();
+
   try {
-    // Get the URL from the request object
     const url = new URL(req.url);
 
-    // Extract query parameters using URLSearchParams
-    const page = url.searchParams.get('page') || 1; // Default page is 1
-    const ticketsNo = url.searchParams.get('ticketsNo') || process.env.TICKETS_NO || 10; // Default tickets per page is 10 or as defined in env file
+    const page = parseInt(url.searchParams.get('page')) || 1; 
+    const ticketsNo = parseInt(url.searchParams.get('ticketsNo')) || parseInt(process.env.TICKETS_NO) || 10; 
 
-    // Get the total number of tickets (for calculating totalPages)
+    const cacheKeyWithParams = `${cacheKey}-${page}-${ticketsNo}`;
+    const cachedData = await redisClient.get(cacheKeyWithParams);
+
+    if (cachedData) {
+      console.log("Cache hit for tickets");
+      return NextResponse.json(JSON.parse(cachedData));
+    }
+
+    console.log("Cache miss for tickets");
+
     const totalTickets = await Ticket.countDocuments();
     const totalPages = Math.ceil(totalTickets / ticketsNo);
 
-    if (!url.searchParams.get('page') && !url.searchParams.get('ticketsNo')) {
-      const tickets = await Ticket.find()
-      return NextResponse.json({ tickets }, { status: 200 });
-    }
-
     const tickets = await Ticket.find().skip((page - 1) * ticketsNo).limit(ticketsNo);
-    return NextResponse.json({ hasNext: (page < totalPages), totalPages, totalTickets, tickets }, { status: 200 });
+
+    const responseData = {
+      hasNext: page < totalPages,
+      totalPages,
+      totalTickets,
+      tickets,
+    };
+
+    await redisClient.set(cacheKeyWithParams, JSON.stringify(responseData), { EX: 3600 });
+
+    return NextResponse.json(responseData, { status: 200 });
   } catch (err) {
     console.log(err);
     return NextResponse.json({ message: "Error", err }, { status: 500 });
+  } finally {
+    redisClient.disconnect();
   }
 }
 
@@ -31,7 +52,6 @@ export async function POST(req) {
   try {
     const body = await req.json();
     const ticketData = body.formData;
-
 
     if (ticketData.status === "not started") {
       await Ticket.create(ticketData);
@@ -47,5 +67,3 @@ export async function POST(req) {
     return NextResponse.json({ message: "Error", err }, { status: 500 });
   }
 }
-
-
