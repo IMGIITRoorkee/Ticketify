@@ -61,8 +61,8 @@ const Dashboard = () => {
         const data = await ticketsPromise;
         clearTimeout(ticketFetchTimeout);
 
-        setTickets(data.tickets || []);
-        setFilteredTickets(data.tickets || []);
+        setTickets(data.tickets);  
+        setFilteredTickets(data.tickets);  
       } catch (error) {
         console.error("Error fetching tickets:", error);
         setTickets([]);

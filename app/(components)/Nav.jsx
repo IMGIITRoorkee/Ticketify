@@ -91,9 +91,7 @@ const Nav = () => {
                 Sign Out
               </button>
             </div>
-          ) : (
-            <p className="text-default-text">INFORMATION MANAGEMENT GROUP</p>
-          )}
+          ) : null}
         </div>
       </div>
     </nav>

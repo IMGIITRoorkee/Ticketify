@@ -10,14 +10,13 @@ config.autoAddCss = false;
 
 const inter = Inter({ subsets: ["latin"] });
 
-const metadata = {
-  title: "Ticket System",
-  description: "Creating a functional ticketing system.",
-};
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <title>Ticket System</title>
+        <meta name="description" content="Creating a functional ticketing system." />
+      </head>
       <body className={inter.className}>
         <SessionProvider>
           <div className="flex flex-col h-screen max-h-screen">
