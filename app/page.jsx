@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import TicketCard from "./(components)/TicketCard";
 import NoTicketExistsCard from "./(components)/NoTicketExistsCard";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const getTickets = async () => {
   try {
@@ -24,6 +26,8 @@ const getTickets = async () => {
 };
 
 const Dashboard = () => {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [tickets, setTickets] = useState([]);
   const [filteredTickets, setFilteredTickets] = useState([]);
   const [statusFilter, setStatusFilter] = useState("all");
@@ -33,9 +37,17 @@ const Dashboard = () => {
   const [groupVisibility, setGroupVisibility] = useState({});
 
   useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/auth/signin");
+    }
+  }, [status, router]);
+
+  useEffect(() => {
     let ticketFetchTimeout;
 
     const fetchTicketsWithTimeout = async () => {
+      if (!session) return;
+
       setIsLoading(true);
 
       try {
@@ -49,8 +61,8 @@ const Dashboard = () => {
         const data = await ticketsPromise;
         clearTimeout(ticketFetchTimeout);
 
-        setTickets(data.tickets);
-        setFilteredTickets(data.tickets);
+        setTickets(data.tickets);  
+        setFilteredTickets(data.tickets);  
       } catch (error) {
         console.error("Error fetching tickets:", error);
         setTickets([]);
@@ -65,7 +77,7 @@ const Dashboard = () => {
     return () => {
       if (ticketFetchTimeout) clearTimeout(ticketFetchTimeout);
     };
-  }, []);
+  }, [session, timeout]);
 
   useEffect(() => {
     if (statusFilter === "all") {

@@ -40,6 +40,12 @@ npm install
 
    Replace `<no-of-tickets-to-be-shown-per-page-by-default>` with the number of tickets you want to show by default per page.
 
+   These variables are needed to configure Google OAuth for authentication:
+   ```env
+   GOOGLE_CLIENT_ID=<your-google-client-id> 
+   GOOGLE_CLIENT_SECRET=<your-google-client-secret>
+   ```
+   Replace `<your-google-client-id>` with the Google OAuth client ID and `<your-google-client-secret>` with Google OAuth client secret.
    ```env
    # Redis Configuration
    REDIS_HOST=127.0.0.1  # Replace with your Redis server's IP or hostname
